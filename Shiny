@@ -108,7 +108,7 @@ server <- shinyServer(function(input, output, session) {
         
         
         output$Plot = downloadHandler(
-                filename = function() { paste("Curva", Sys.Date(), paste0(".", input$device), sep='') },
+                filename = function() { paste("Curva", Sys.Date(), paste0(".", input$device)) },
                 
                 content = function(file) {
                         ggsave(file, plot = grafico(), device =  input$device, units = "cm", width = input$a, height = input$l, dpi = 600)
