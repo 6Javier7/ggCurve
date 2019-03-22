@@ -5,7 +5,7 @@ library(svglite)
 library(grDevices)
 
 ui <- shinyUI(fluidPage(
-        titlePanel("Curvas de Acumulacion"),
+        titlePanel("Curvas de Acumulación"),
         tabsetPanel(
                 tabPanel("Tabla de Abundancia",
                          titlePanel("Cargando Archivos"),
@@ -33,14 +33,14 @@ ui <- shinyUI(fluidPage(
                                  )
                          )
                 ),
-                tabPanel("Grafico de las Curvas",
+                tabPanel("Gráfico de las Curvas",
                          pageWithSidebar(
                                  headerPanel('Especificaciones'),
-                                 sidebarPanel( numericInput("a", "Ancho(cm):", 7, min = 2, max = 50),
-                                               numericInput("l", "Altura(cm):", 7, min = 2, max = 50),
+                                 sidebarPanel( numericInput("a", "Ancho(cm):", 16, min = 2, max = 50),
+                                               numericInput("l", "Altura(cm):", 8, min = 2, max = 50),
                                                numericInput("p", "Permutaciones", 100, min = 1, max = 20000),
-                                               radioButtons("device", "Formato", choices = c("png", "svg"), selected = "svg"),
-                                               textInput(inputId = "x", label = "Unidades de Muestreo", value = "", placeholder = "Titulo del eje X"),
+                                               radioButtons("device", "Formato", choices = c("png", "svg"), selected = "png"),
+                                               textInput(inputId = "x", label = "Unidad de muestreo", value = "", placeholder = "Titulo del eje X"),
                                                downloadButton('Plot')
                                                
                                                
@@ -50,7 +50,7 @@ ui <- shinyUI(fluidPage(
                                  )
                          )
                 ), 
-                tabPanel("Porcentage de Eficiencia",
+                tabPanel("Porcentaje de Eficiencia",
                          pageWithSidebar(
                                  headerPanel('Tabla de Rendimiento'),
                                  sidebarPanel( downloadButton('Porcentaje1')
@@ -98,7 +98,7 @@ server <- shinyServer(function(input, output, session) {
                 print(pool1)
                 pool <- fortify(pool1)
                 p <- ggplot(pool, aes(x = Size, y = Richness, colour = Index)) + geom_line() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.key = element_rect(fill = "white", colour = "white"))   
-                p1 <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper, fill = Index), linetype = 0, alpha = 0.1) + labs(x = input$x, y = "Riqueza", colour = "Indices", fill = "Indices")
+                p1 <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper, fill = Index), linetype = 0, alpha = 0.1) + labs(x = input$x, y = "Riqueza", colour = "Índices", fill = "Índices")
                 print(p1) })
         
         
@@ -111,7 +111,7 @@ server <- shinyServer(function(input, output, session) {
                 filename = function() { paste("Curva", Sys.Date(), paste0(".", input$device), sep='') },
                 
                 content = function(file) {
-                        ggsave(file, plot = grafico(), device =  input$device, units = "cm", width = input$a, height = input$l, dpi = 1000)
+                        ggsave(file, plot = grafico(), device =  input$device, units = "cm", width = input$a, height = input$l, dpi = 600)
                 })
         
         Eficiencia <- reactive({
